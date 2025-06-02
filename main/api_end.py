@@ -8,16 +8,9 @@ from fastapi.responses import JSONResponse
 app= FastAPI()
 
 
-@app.get("/",response_model=blog.ready)
-def func():
-    obj = blog.intial(title="My Title", body="This is the body", i_d=101)
-    return obj
-
-
-
-@app.post("/item")
+@app.post("/")
 async def func(request:Request):
-    data = await request.json()  # Parse JSON body to dict (no schema needed)
+    data = await request.json()  
 
 
     output_file = "saved_data.json"
@@ -27,17 +20,31 @@ async def func(request:Request):
 
     try:
         
+
         for i in data:
-            if(i["content"]["type"] !="Microsoft.SecurityInsights/dataConnectors"):
-                return JSONResponse(status_code=200, content={
+            print(type(i["content"]))
+            if(type(i["content"])==list):
+                print(1)
+                if(i["content"][0]["type"] !="Microsoft.SecurityInsights/dataConnectors"):
+                    return JSONResponse(status_code=200, content={
+                            "status": "failed",
+                            "mssg": f"the type of polling file is wrong the type in file is {i["content"][0]["type"]}"
+                        })
+            else:
+                print(2)
+                if(i["content"]["type"] !="Microsoft.SecurityInsights/dataConnectors"):
+                    return JSONResponse(status_code=200, content={
                         "status": "failed",
-                        "mssg": f"File '{f.filename}' is missing required field 'name'"
+                        "mssg": f"the type of polling file is wrong the type in file is {i["content"]["type"]}"
                     })
-                break
+            
         return JSONResponse(status_code=200, content={
                 "status": "passed",
                 "mssg": "All files passed validation ✅"
             })   
+
+
+
 
     except Exception as e:
         return JSONResponse(status_code=500, content={
