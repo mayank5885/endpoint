@@ -80,22 +80,23 @@ obj1=[
 ]
 
 for i in obj1:
-    print(type(i["content"]))
-    if(type(i["content"])==list):
-        print(1)
-        if(i["content"][0]["type"] !="Microsoft.SecurityInsights/dataConnectors"):
-            check="failed"
-            print(check+f"hello {i["content"][0]["type"]}")
-        else :
-            check="pass"
-            print(check+f"hello {i["content"][0]["type"]}")
-        
-    else:
-        print(2)
-        if(i["content"]["type"] !="Microsoft.SecurityInsights/dataConnectors"):
-            check="failed"
-            print(check)
-        else :
-            check="pass"
-            print(check)
+    print(type(i["filename"]))
+    if "pollr" in i["filename"].lower():
+        if(type(i["content"])==list):
+            print(1)
+            if(i["content"][0]["type"] !="Microsoft.SecurityInsights/dataConnectors"):
+                check="failed"
+                print(check+f"hello {i["content"][0]["type"]}")
+            else :
+                check="pass"
+                print(check+f"hello {i["content"][0]["type"]}")
+            
+        else:
+            print(2)
+            if(i["content"]["type"] !="Microsoft.SecurityInsights/dataConnectors"):
+                check="failed"
+                print(check)
+            else :
+                check="pass"
+                print(check)
 
